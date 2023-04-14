@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Résultat</title>
+    <style>
+    .highlight {
+      background-color: green;
+      
+    }
+    
+    .highlight:hover::before {
+      content: attr(data-tooltip);
+      
+      background-color: #000;
+      color: #fff;
+      padding: 0.5em;
+      border-radius: 0.5em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .highlight:hover::after {
+      content: '';
+      position: absolute;
+      top: -0.5em;
+      left: 50%;
+      margin-left: -0.5em;
+      border: solid transparent;
+      border-width: 0.5em;
+      border-bottom-color: #000;
+    }
+    
+    .highlight:hover::before,
+    .highlight:hover::after {
+      opacity: 1;
+    }
+    
+      }
+    </style>
+  </head>
+  <body>
+  <h1>Highlighted content</h1>
+  <div>
+  <%= @highlighted_text %>
+</div>
+
+<!-- Code pour afficher les infobulles -->
+<script>
+  var highlightedElements = document.querySelectorAll('.highlight');
+  highlightedElements.forEach(function(element) {
+    element.addEventListener('mouseover', function() {
+      var tooltip = this.getAttribute('data-tooltip');
+      var tooltipElement = document.createElement('div');
+      tooltipElement.classList.add('tooltip');
+      tooltipElement.innerHTML = tooltip;
+      document.body.appendChild(tooltipElement);
+      
+      var rect = this.getBoundingClientRect();
+      var tooltipRect = tooltipElement.getBoundingClientRect();
+      tooltipElement.style.top = rect.top - tooltipRect.height + 'px';
+      tooltipElement.style.left = rect.left + (rect.width - tooltipRect.width) / 2 + 'px';
+    });
+    
+    element.addEventListener('mouseout', function() {
+      var tooltip = document.querySelector('.tooltip');
+      if (tooltip) {
+        tooltip.remove();
+      }
+    });
+  });
+</script>
+
+<style>
+div {
+  border: 1px solid black;
+  border-width: 1px 2px 3px 4px; /* haut, droite, bas, gauche */
+  padding: 10px;
+  width:500px;
+  margin-left: 300px;
+}
+h1{
+  margin-left: 300px;
+}
+
+  .highlight {
+    background-color: yellow;
+    cursor: pointer;
+  }
+  
+  .tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    
+  }
+</style>
+
+  </body>
+</html>
