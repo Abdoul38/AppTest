@@ -11,32 +11,39 @@ post '/highlight' do
     { start: 73, end: 92, comment: "Bar" },
     { start: 50, end: 98, comment: "Baz" }
     ]
-  @text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consectetur malesuada
-  velit, sit amet porta magna maximus nec. Aliquam aliquet tincidunt enim vel rutrum. Ut
-  augue lorem, rutrum et turpis in, molestie mollis nisi. Ut dapibus erat eget felis pulvinar, ac
-  vestibulum augue bibendum. Quisque sagittis magna nisi. Sed aliquam porttitor
-  fermentum. Nulla consequat justo eu nulla sollicitudin auctor. Sed porta enim non diam
-  mollis, a ullamcorper dolor molestie. Nam eu ex non nisl viverra hendrerit. Donec ante
-  augue, eleifend vel eleifend quis, laoreet volutpat ipsum. Integer viverra aliquam nulla, ac
-  rutrum dui sodales nec."
-  paragraphs = text.split("\n").map { |paragraph| "<p>#{paragraph}</p>" }
-  
-  highlights.each do |highlight|
-    start_index = highlight[:start]
-    end_index = highlight[:end]
-    comment = highlight[:comment]
-    
-    # Ajout des balises HTML pour surligner et afficher l'infobulle
-    paragraphs.each do |paragraph|
-      if start_index < paragraph.length && end_index >= start_index
-        highlighted_text = paragraph[start_index..[end_index, paragraph.length - 1].min]
-        highlighted_text = "<span class=\"highlight\" data-tooltip=\"#{comment}\">#{highlighted_text}</span>"
-        paragraph[start_index..end_index] = highlighted_text
-        start_index = end_index + highlighted_text.length - (end_index - start_index + 1)
+    paragraphs = text.split("\n\n")
+
+    # Process each paragraph
+    paragraphs.map! do |paragraph|
+      # Search for matches in the paragraph
+      matches = []
+      highlights.each do |highlight|
+        start_index = highlight[:start]
+        end_index = highlight[:end]
+        while start_index < paragraph.length && (index = paragraph.index(/(?<=\b|\W).{#{start_index}}(?=\b|\W)/, start_index))
+          if index < end_index
+            matches << { start: index, end: [end_index, paragraph.length].min, comment: highlight[:comment] }
+            start_index = index + 1
+          else
+            break
+          end
+        end
       end
-    end
-  end
+      
+      # Apply highlights to the paragraph
+      highlighted_paragraph = ""
+      current_index = 0
+      matches.each do |match|
+        highlighted_paragraph += paragraph[current_index...match[:start]]
+        highlighted_paragraph += "<span class='highlight' data='#{match[:comment]}'>#{paragraph[match[:start]...match[:end]]}</span>"
+        current_index = match[:end]
+      end
+      highlighted_paragraph += paragraph[current_index...paragraph.length]
   
-  @highlighted_text = paragraphs.join('')
-  erb :result
-end
+      "<p>#{highlighted_paragraph}</p>"
+    end
+  
+    # Combine the paragraphs into the final result
+    @highlighted_text = paragraphs.join('')
+    erb :result
+  end

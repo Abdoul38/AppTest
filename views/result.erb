@@ -2,40 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Résultat</title>
+    <title>Highlighted content</title>
     <style>
-    .highlight {
-      background-color: green;
-      
-    }
     
     .highlight:hover::before {
-      content: attr(data-tooltip);
-      
-      background-color: #000;
+      background-color: #d48fc5;
       color: #fff;
-      padding: 0.5em;
-      border-radius: 0.5em;
-      opacity: 0;
-      transition: opacity 0.3s;
     }
-    
-    .highlight:hover::after {
-      content: '';
-      position: absolute;
-      top: -0.5em;
-      left: 50%;
-      margin-left: -0.5em;
-      border: solid transparent;
-      border-width: 0.5em;
-      border-bottom-color: #000;
-    }
-    
-    .highlight:hover::before,
-    .highlight:hover::after {
-      opacity: 1;
-    }
-    
       }
     </style>
   </head>
@@ -50,7 +23,7 @@
   var highlightedElements = document.querySelectorAll('.highlight');
   highlightedElements.forEach(function(element) {
     element.addEventListener('mouseover', function() {
-      var tooltip = this.getAttribute('data-tooltip');
+      var tooltip = this.getAttribute('data');
       var tooltipElement = document.createElement('div');
       tooltipElement.classList.add('tooltip');
       tooltipElement.innerHTML = tooltip;
@@ -84,13 +57,17 @@ h1{
 }
 
   .highlight {
-    background-color: yellow;
+    background-color: #d48fc5;
+    cursor: pointer;
+  }
+  .highlight1 {
+    background-color: #9bd8ee;
     cursor: pointer;
   }
   
   .tooltip {
     position: absolute;
-    background-color: #333;
+    background-color: #d48fc5;
     color: #fff;
     
   }
