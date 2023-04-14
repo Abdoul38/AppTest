@@ -13,9 +13,9 @@ post '/highlight' do
     ]
     paragraphs = text.split("\n\n")
 
-    # Process each paragraph
+   
     paragraphs.map! do |paragraph|
-      # Search for matches in the paragraph
+      
       matches = []
       highlights.each do |highlight|
         start_index = highlight[:start]
@@ -30,7 +30,7 @@ post '/highlight' do
         end
       end
       
-      # Apply highlights to the paragraph
+      
       highlighted_paragraph = ""
       current_index = 0
       matches.each do |match|
@@ -43,7 +43,6 @@ post '/highlight' do
       "<p>#{highlighted_paragraph}</p>"
     end
   
-    # Combine the paragraphs into the final result
     @highlighted_text = paragraphs.join('')
     erb :result
   end
