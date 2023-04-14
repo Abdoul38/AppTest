@@ -4,7 +4,7 @@ get '/' do
   erb :index
 end
 
-post '/highlight' do
+post '/' do
   text = params[:text]
   highlights = [
     { start: 20, end: 35, comment: "Foo" },
@@ -44,5 +44,5 @@ post '/highlight' do
     end
   
     @highlighted_text = paragraphs.join('')
-    erb :result
+    erb :index
   end

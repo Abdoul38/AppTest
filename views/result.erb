@@ -1,19 +1,46 @@
-<!DOCTYPE html>
+=begin <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Highlighted content</title>
+    <title>Résultat</title>
     <style>
+    .highlight {
+      background-color: green;
+      cursor: pointer;
+    }
     
     .highlight:hover::before {
-      background-color: #d48fc5;
+      content: attr(data-tooltip);
+      position: absolute;
+      top: -1.5em;
+      background-color: #000;
       color: #fff;
+      padding: 0.5em;
+      border-radius: 0.5em;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
+    
+    .highlight:hover::after {
+      content: '';
+      position: absolute;
+      top: -0.5em;
+      left: 50%;
+      margin-left: -0.5em;
+      border: solid transparent;
+      border-width: 0.5em;
+      border-bottom-color: #000;
+    }
+    
+    .highlight:hover::before,
+    .highlight:hover::after {
+      opacity: 1;
+    }
+    
       }
     </style>
   </head>
   <body>
-  <h1>Highlighted content</h1>
   <div>
   <%= @highlighted_text %>
 </div>
@@ -23,7 +50,7 @@
   var highlightedElements = document.querySelectorAll('.highlight');
   highlightedElements.forEach(function(element) {
     element.addEventListener('mouseover', function() {
-      var tooltip = this.getAttribute('data');
+      var tooltip = this.getAttribute('data-tooltip');
       var tooltipElement = document.createElement('div');
       tooltipElement.classList.add('tooltip');
       tooltipElement.innerHTML = tooltip;
@@ -52,23 +79,20 @@ div {
   width:500px;
   margin-left: 300px;
 }
-h1{
-  margin-left: 300px;
-}
 
   .highlight {
-    background-color: #9bd8ee;
+    background-color: yellow;
     cursor: pointer;
   }
   
-  
   .tooltip {
     position: absolute;
-    background-color: #d48fc5;
+    background-color: #333;
     color: #fff;
-    
+    padding: 5px;
+    border-radius: 3px;
   }
 </style>
 
   </body>
-</html>
+</html> =end
